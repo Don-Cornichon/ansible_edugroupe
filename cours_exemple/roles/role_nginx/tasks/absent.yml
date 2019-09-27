@@ -1,0 +1,4 @@
+- name: Ensure that nginx are well installed
+  yum:
+    name: nginx
+    state: absent

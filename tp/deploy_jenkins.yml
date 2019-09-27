@@ -1,0 +1,7 @@
+--- 
+- name: Ensure that jenkins is well installed
+  hosts: jenkins
+  become: yes
+  roles: 
+    - role_jenkins
+

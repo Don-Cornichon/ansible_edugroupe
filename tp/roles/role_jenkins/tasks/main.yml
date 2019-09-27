@@ -1,0 +1,45 @@
+---
+# tasks file for role_jenkins
+- name: Add repository of Jenkins
+  yum_repository:
+    name: Jenkins 
+    description: Jenkins Yum repo 
+    baseurl: http://pkg.jenkins-ci.org/redhat
+
+- name: Ensure that nginx are well installed
+  yum:
+    name: nginx
+    state: present
+
+- rpm_key:
+    state: present
+    key: https://jenkins-ci.org/redhat/jenkins-ci.org.key
+
+- name: Ensure that Jenkins are well installed
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - jenkins
+    - java
+
+- name: Ensure that jenkins are well started
+  service:
+    name: jenkins
+    state: started
+    enabled: yes
+
+- name: Ensure that firewall is well stopped
+  service:
+    name: firewalld
+    state: stopped
+
+- name: debug
+  debug:
+    var: ansible_enp0s3.ipv4.address
+
+- name: Ensure that application is well availible
+  uri:
+    url: http://{{ ansible_enp0s3.ipv4.address }}:8080
+    status_code: 403
+  

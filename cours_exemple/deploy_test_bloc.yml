@@ -1,0 +1,47 @@
+- name: je lance nginx
+  hosts: app
+  tasks:
+    - name: je lance le bloc 1 
+      block:
+        - name: install nginx
+          yum:
+            name: nginx
+            state: present
+        - name: restart nginx
+          service:
+            name: nginx
+            state: restarted
+      rescue:
+        - name: remove nginx
+          yum:
+            name: nginx
+            state: absent
+      always:
+        - name: display playbook finished message
+          debug:
+            msg: 'your play was played :)'
+      tags: nginx
+      become: yes
+
+    - name: je lance le bloc 2
+      block:
+        - name: install nginxi_2
+          yum:
+            name: nginx
+            state: present
+        - name: restart nginx_2
+          service:
+            name: nginx
+            state: restarted
+      rescue:
+        - name: remove nginx_2
+          yum:
+            name: nginx
+            state: absent
+      always:
+        - name: display playbook finished message 2
+          debug:
+            msg: 'your play was played :)'
+      tags: nginx_2
+      become: yes
+

@@ -1,0 +1,11 @@
+- name: Ensure that nginx are well installed
+  yum:
+    name: nginx
+    state: present
+
+- name: Ensure that nginx are well started
+  service:
+    name: nginx
+    state: started
+  register: nginx_service
+

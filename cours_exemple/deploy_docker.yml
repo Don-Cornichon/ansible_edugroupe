@@ -1,0 +1,74 @@
+--- 
+- name: Ensure that docker is well installed
+  hosts: app
+  become: yes
+  gather_facts: False
+  handlers:
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted
+  tasks:
+    - name: Ensure that docker are well installed
+      yum:
+        name: docker
+        state: present
+      ignore_errors: True
+
+    - name: Ensure that nginx are well installed
+      yum:
+        name: nginx
+        state: present
+      notify: restart nginx
+
+    - name: Ensure that docker are well started
+      service:
+        name: docker
+        state: started
+      register: docker_service
+
+    - name: check user
+      yum:
+        list: ansible
+      register: ansible
+
+    - name: Check the value of the var docker_service
+      debug: 
+        var: ansible
+
+    - name: redifine var
+      set_fact: 
+        app_user: titi
+
+    - name: Check the value of the var docker_service
+      debug:
+        msg: "{{ app_password }}"
+
+#  roles:
+#    - { role: role_nginx, nginx_state: "absent" }
+
+- name: Ensure that docker is well installed
+  hosts: db
+  become: yes
+  gather_facts: False
+  tasks:
+    - name: Ensure that docker are well installed
+      yum:
+        name: dockerctreopbien
+        state: present
+      ignore_errors: True
+
+    - name: Ensure that docker are well started
+      service:
+        name: docker
+        state: started
+      register: docker_service
+
+    - name: check user
+      shell: cat /etc/passwd
+      register: shell
+
+    - name: Check the value of the var docker_service
+      debug:
+        msg: "{{ app_user }}"
+
